@@ -53,17 +53,22 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  final TextEditingController _typeAheadController = TextEditingController();
+
+  final TextEditingController _autocompleteInputController =
+      TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
+        body: SingleChildScrollView(
             padding: const EdgeInsets.only(top: 25),
-            color: Color(0xffE5E5E5),
-            child: Row(
-              children: [_leftColumn(), _detailsColumn(context)],
-            )));
+            child: Container(
+                height: MediaQuery.of(context).size.height - 25,
+                color: Color(0xffB5DBED),
+                child: Row(
+                  children: [_leftColumn(), _rightColumn()],
+                ))));
   }
 
   Widget _leftColumn() {
@@ -90,7 +95,11 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Column(children: [
                 _appInfoText(),
                 Container(height: 40),
-                _autocomplete()
+                _autocomplete(),
+                _getInputDescription("Wybierz kategorię"),
+                Container(height: 20),
+                _businessDescription(),
+                _getInputDescription("Wpisz opis kategorii")
               ]))
         ]));
   }
@@ -109,38 +118,121 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _autocomplete() {
     return Container(
         child: TypeAheadField<PKDData?>(
-          textFieldConfiguration: TextFieldConfiguration(
-              controller: this._typeAheadController,
-              style: GoogleFonts.montserrat(color: Colors.black),
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.only(top:0, bottom: 0, left: 15),
-                focusedBorder: OutlineInputBorder(
-                  gapPadding: 0.0,
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                  borderSide: BorderSide(color: Color(0xff406D86), width: 2.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  gapPadding: 0.0,
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                  borderSide: BorderSide(color: Color(0xff406D86), width: 2.0),
-                ),
-                hintText: 'Mobile Number',
-              )),
-          suggestionsCallback: (pattern) async {
-            return BusinessCategoriesService.getSuggestions(pattern);
-          },
-          itemBuilder: (context, suggestion) {
-            return ListTile(
-                leading: Image.asset(suggestion!.iconPath),
-                title: Text(suggestion.name));
-          },
-          onSuggestionSelected: (suggestion) {
-            this._typeAheadController.text = suggestion!.name;
-          },
-        ));
+      suggestionsBoxDecoration: SuggestionsBoxDecoration(elevation: 1.0),
+      textFieldConfiguration: TextFieldConfiguration(
+          controller: this._autocompleteInputController,
+          style: GoogleFonts.montserrat(color: Colors.black),
+          decoration: _autocompleteInputDecoration()),
+      suggestionsCallback: (pattern) async {
+        return BusinessCategoriesService.getSuggestions(pattern);
+      },
+      itemBuilder: (context, suggestion) {
+        return ListTile(
+            leading: Image.asset(suggestion!.iconPath),
+            title: Text(suggestion.name));
+      },
+      onSuggestionSelected: (suggestion) {
+        this._autocompleteInputController.text = suggestion!.name;
+        this._descriptionController.text = suggestion.description;
+      },
+    ));
   }
 
-  Widget _detailsColumn(BuildContext context) {
-    return Container();
+  Widget _businessDescription() {
+    return TextField(
+        keyboardType: TextInputType.multiline,
+        controller: this._descriptionController,
+        scrollPadding: EdgeInsets.only(bottom: 128),
+        decoration:
+            _standardInputDecoration().copyWith(hintText: "Opis działalności"),
+        minLines: 3,
+        style: GoogleFonts.montserrat(color: Colors.black),
+        maxLines: 30);
+  }
+
+  Widget _rightColumn() {
+    return Expanded(
+        child: Column(children: [
+      Container(height: 100),
+      Text("Please use filtration to improve searching.",
+          style: GoogleFonts.lora(fontSize: 30, fontWeight: FontWeight.w600)),
+      Container(
+          width: 300,
+          padding: EdgeInsets.only(top: 50),
+          child: Column(children: [
+            _getRangeLabel("Estate’s price"),
+          ])),
+    ]));
+  }
+
+  InputDecoration _autocompleteInputDecoration() {
+    return InputDecoration(
+      contentPadding: EdgeInsets.only(top: 0, bottom: 0, left: 15),
+      focusedBorder: OutlineInputBorder(
+        gapPadding: 0.0,
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+        borderSide: BorderSide(color: Color(0xff406D86), width: 2.0),
+      ),
+      enabledBorder: OutlineInputBorder(
+        gapPadding: 0.0,
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+        borderSide: BorderSide(color: Color(0xff406D86), width: 2.0),
+      ),
+      hintText: 'Mobile Number',
+    );
+  }
+
+  InputDecoration _standardInputDecoration() {
+    return InputDecoration(
+      focusedBorder: OutlineInputBorder(
+        gapPadding: 0.0,
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+        borderSide: BorderSide(color: Color(0xff406D86), width: 2.0),
+      ),
+      enabledBorder: OutlineInputBorder(
+        gapPadding: 0.0,
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+        borderSide: BorderSide(color: Color(0xff406D86), width: 2.0),
+      ),
+      hintText: 'Mobile Number',
+    );
+  }
+
+  Widget _getInputDescription(String text) {
+    return Container(
+        width: double.infinity,
+        padding: EdgeInsets.only(left: 10, top: 4),
+        child: Text(text,
+            style: GoogleFonts.montserrat(
+                fontWeight: FontWeight.w300,
+                fontSize: 10,
+                color: Color(0xff1E1E1E))));
+  }
+
+  Widget _getRangeLabel(String text) {
+    return Container(
+      width: double.infinity,
+      child: Text(text,
+          style: GoogleFonts.lora(fontSize: 23, fontWeight: FontWeight.w600)),
+    );
+  }
+
+  Widget _getPriceRangeSlider() {
+    TextEditingController firstDotController = TextEditingController(text: "20");
+    return Row(children: [
+      _rangeInput(firstDotController),
+
+    ]);
+  }
+
+  Widget _rangeInput(TextEditingController textEditingController) {
+    return Container(
+        width: 100,
+        child: TextField(
+            controller: textEditingController,
+            keyboardType: TextInputType.number,
+            decoration: _standardInputDecoration()
+                .copyWith(hintText: "Opis działalności"),
+            style: GoogleFonts.montserrat(color: Colors.black)));
   }
 }
