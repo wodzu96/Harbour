@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>973270436396-71ub91uc2igh6m8hne98p3cd6aep33g9.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.973270436396-71ub91uc2igh6m8hne98p3cd6aep33g9</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>973270436396-3foemksebjjkq1g18ucqf5io4557klqa.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDWCk1xrBduih6joFE6YA1BuwfcyfVXSgQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>973270436396</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.codreamstudio.slaskwroclaw</string>
+	<key>PROJECT_ID</key>
+	<string>slaskwroclaw-ede23</string>
+	<key>STORAGE_BUCKET</key>
+	<string>slaskwroclaw-ede23.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:973270436396:ios:b749c4effd799932addf89</string>
+	<key>DATABASE_URL</key>
+	<string>https://slaskwroclaw-ede23.firebaseio.com</string>
+</dict>
+</plist>
