@@ -41,7 +41,7 @@ class Location {
 }
 
 class LocationFeature {
-  final String value;
+  final double value;
   final String name;
 
   LocationFeature({
