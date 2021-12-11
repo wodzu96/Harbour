@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:harbour/BusinessCategoriesService.dart';
 import 'package:harbour/res/Assets.dart';
+import 'package:harbour/widget/RangeSlider.dart';
 
 import 'models/PKDData.dart';
 
@@ -54,6 +56,18 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
+  final TextEditingController _minPriceInputController =
+      TextEditingController(text: "20");
+  final TextEditingController _maxPriceInputController =
+      TextEditingController(text: "100000");
+  final TextEditingController _minEstateAreaInputController =
+      TextEditingController(text: "20");
+  final TextEditingController _maxEstateAreaInputController =
+      TextEditingController(text: "100000");
+  final TextEditingController _minRoomsNumberAreaInputController =
+      TextEditingController(text: "1");
+  final TextEditingController _maxRoomsNumberInputController =
+      TextEditingController(text: "8");
   final TextEditingController _autocompleteInputController =
       TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
@@ -61,14 +75,16 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SingleChildScrollView(
-            padding: const EdgeInsets.only(top: 25),
+        body: ProgressHUD(
+            child: Builder(
+                builder: (context) => SingleChildScrollView(
+            padding: const EdgeInsets.only(top: 24),
             child: Container(
-                height: MediaQuery.of(context).size.height - 25,
-                color: Color(0xffB5DBED),
-                child: Row(
-                  children: [_leftColumn(), _rightColumn()],
-                ))));
+                        height: MediaQuery.of(context).size.height - 24,
+                        color: Color(0xffB5DBED),
+                        child: Row(
+                          children: [_leftColumn(), _rightColumn(context)],
+                        ))))));
   }
 
   Widget _leftColumn() {
@@ -150,19 +166,104 @@ class _MyHomePageState extends State<MyHomePage> {
         maxLines: 30);
   }
 
-  Widget _rightColumn() {
+  Widget _rightColumn(BuildContext context) {
     return Expanded(
         child: Column(children: [
       Container(height: 100),
       Text("Please use filtration to improve searching.",
           style: GoogleFonts.lora(fontSize: 30, fontWeight: FontWeight.w600)),
       Container(
-          width: 300,
+          width: 400,
           padding: EdgeInsets.only(top: 50),
           child: Column(children: [
-            _getRangeLabel("Estate’s price"),
+            _filterCell("Estate’s price", _minPriceInputController,
+                _maxPriceInputController),
+            Container(height: 50),
+            _filterCell("Estate’s area", _minEstateAreaInputController,
+                _maxEstateAreaInputController),
+            Container(height: 50),
+            _filterCell("Number of rooms", _minRoomsNumberAreaInputController,
+                _maxRoomsNumberInputController),
+            Container(height: 50),
+            SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                          )
+                      ),
+                      backgroundColor:
+                          MaterialStateProperty.all(Color(0xff1D3851))),
+                  onPressed: () {
+                    final progress = ProgressHUD.of(context);
+                    progress?.showWithText('Loading...');
+                    Future.delayed(Duration(seconds: 1), () {
+                      progress?.dismiss();
+                    });
+                  },
+                  child: Text('SEARCH', style: GoogleFonts.montserrat(fontWeight: FontWeight.w700)),
+                ))
           ])),
     ]));
+  }
+
+  Widget _filterCell(
+      String name,
+      TextEditingController minValueEditingController,
+      TextEditingController maxValueEditingController) {
+    return Column(children: [
+      _getRangeLabel(name),
+      Container(height: 10),
+      Row(children: [
+        Container(width: 20),
+        _fromToLabel("from:"),
+        Container(width: 20),
+        _rangeInput(minValueEditingController),
+        Container(width: 40),
+        _fromToLabel("to:"),
+        Container(width: 20),
+        _rangeInput(maxValueEditingController)
+      ])
+    ]);
+  }
+
+  Widget _fromToLabel(String data) {
+    return Text(data,
+        style:
+            GoogleFonts.montserrat(fontWeight: FontWeight.w400, fontSize: 15));
+  }
+
+  Widget _rangeInput(TextEditingController textEditingController) {
+    return Container(
+        width: 100,
+        child: TextField(
+            textAlign: TextAlign.center,
+            controller: textEditingController,
+            keyboardType: TextInputType.number,
+            decoration: _standardRangeDecoration()
+                .copyWith(hintText: "Opis działalności"),
+            style: GoogleFonts.montserrat(color: Colors.black)));
+  }
+
+  InputDecoration _standardRangeDecoration() {
+    return InputDecoration(
+      filled: true,
+      fillColor: Colors.white,
+      contentPadding: EdgeInsets.only(top: 0, bottom: 0, left: 15, right: 15),
+      focusedBorder: OutlineInputBorder(
+        gapPadding: 0.0,
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+        borderSide: BorderSide(color: Color(0xff406D86), width: 2.0),
+      ),
+      enabledBorder: OutlineInputBorder(
+        gapPadding: 0.0,
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+        borderSide: BorderSide(color: Color(0xff406D86), width: 2.0),
+      ),
+    );
   }
 
   InputDecoration _autocompleteInputDecoration() {
@@ -216,23 +317,6 @@ class _MyHomePageState extends State<MyHomePage> {
           style: GoogleFonts.lora(fontSize: 23, fontWeight: FontWeight.w600)),
     );
   }
-
-  Widget _getPriceRangeSlider() {
-    TextEditingController firstDotController = TextEditingController(text: "20");
-    return Row(children: [
-      _rangeInput(firstDotController),
-
-    ]);
-  }
-
-  Widget _rangeInput(TextEditingController textEditingController) {
-    return Container(
-        width: 100,
-        child: TextField(
-            controller: textEditingController,
-            keyboardType: TextInputType.number,
-            decoration: _standardInputDecoration()
-                .copyWith(hintText: "Opis działalności"),
-            style: GoogleFonts.montserrat(color: Colors.black)));
-  }
 }
+
+typedef ChangeValueCallback = void Function(int value);
