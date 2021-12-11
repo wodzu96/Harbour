@@ -113,6 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
               controller: this._typeAheadController,
               style: GoogleFonts.montserrat(color: Colors.black),
               decoration: InputDecoration(
+                contentPadding: EdgeInsets.only(top:0, bottom: 0, left: 15),
                 focusedBorder: OutlineInputBorder(
                   gapPadding: 0.0,
                   borderRadius: BorderRadius.all(Radius.circular(15)),
