@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:harbour/BusinessCategoriesService.dart';
+import 'package:harbour/map_screen.dart';
+import 'package:harbour/models/Location.dart';
 
 import 'models/PKDData.dart';
 
@@ -26,7 +28,9 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MapScreen(
+        locations: Location.mockMyShitUp(),
+      ),
     );
   }
 }
@@ -58,49 +62,43 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           title: Text(widget.title),
         ),
-        body: Row(children: [_localizationColumn(context),
-        _detailsColumn(context)],
-    )
-    );
+        body: Row(
+          children: [_localizationColumn(context), _detailsColumn(context)],
+        ));
   }
 
   Widget _localizationColumn(BuildContext context) {
-    return Container(width: 300, child:
-    Column(children: [
-      Padding(padding: const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8), child:   _autocomplete())
-    ,
-      Expanded(child: Container(color: Color(0xFF0d3225)))
-    ]));
+    return Container(
+        width: 300,
+        child: Column(children: [
+          Padding(
+              padding:
+                  const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8),
+              child: _autocomplete()),
+          Expanded(child: Container(color: Color(0xFF0d3225)))
+        ]));
   }
 
   Widget _detailsColumn(BuildContext context) {
     return Expanded(child: Container(color: Color(0xFFaf0a0a)));
   }
 
-  Widget _autocomplete(){
-   return TypeAheadField<PKDData?>(
+  Widget _autocomplete() {
+    return TypeAheadField<PKDData?>(
       textFieldConfiguration: TextFieldConfiguration(
           autofocus: true,
-          style: DefaultTextStyle.of(context).style.copyWith(
-              fontStyle: FontStyle.italic
-          ),
-          decoration: InputDecoration(
-              border: OutlineInputBorder()
-          )
-      ),
+          style: DefaultTextStyle.of(context)
+              .style
+              .copyWith(fontStyle: FontStyle.italic),
+          decoration: InputDecoration(border: OutlineInputBorder())),
       suggestionsCallback: (pattern) async {
         return BusinessCategoriesService.getSuggestions(pattern);
       },
       itemBuilder: (context, suggestion) {
         return ListTile(
-          leading: suggestion!.icon,
-          title: Text(suggestion.name)
-        );
+            leading: suggestion!.icon, title: Text(suggestion.name));
       },
-      onSuggestionSelected: (suggestion) {
-
-      },
+      onSuggestionSelected: (suggestion) {},
     );
   }
-
 }
