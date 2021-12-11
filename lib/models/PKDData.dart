@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 class PKDData {
   final String name;
-  final AssetImage icon;
+  final Image icon;
   final String description;
 
   const PKDData({

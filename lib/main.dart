@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:harbour/BusinessCategoriesService.dart';
 
-import 'autocompleteinput.dart';
 import 'models/PKDData.dart';
 
 void main() {
@@ -68,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _localizationColumn(BuildContext context) {
     return Container(width: 300, child:
     Column(children: [
-      Padding(padding: const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8), child:   AutocompleteBasicExample())
+      Padding(padding: const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8), child:   _autocomplete())
     ,
       Expanded(child: Container(color: Color(0xFF0d3225)))
     ]));
@@ -94,15 +93,14 @@ class _MyHomePageState extends State<MyHomePage> {
       },
       itemBuilder: (context, suggestion) {
         return ListTile(
-          leading: ,
-          title: Text(suggestion.name),
-          subtitle: Text('\$${suggestion['price']}'),
+          leading: suggestion!.icon,
+          title: Text(suggestion.name)
         );
       },
       onSuggestionSelected: (suggestion) {
 
       },
-    )
+    );
   }
 
 }
