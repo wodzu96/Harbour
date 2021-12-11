@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:harbour/BusinessCategoriesService.dart';
+import 'package:harbour/map_screen.dart';
+import 'package:harbour/models/Location.dart';
 import 'package:harbour/res/Assets.dart';
 
 import 'models/PKDData.dart';
@@ -32,6 +34,136 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+Widget _mapScreen() => MapScreen(
+      locations: [
+        Location(
+          price: 1,
+          description:
+              'wejfnwjencseojnfsoenfoisenfoiwenfoiwneio oifwenfoinewoinf wioenfoi wneiofn ewoinfoi nweiofnoiwenoifniowenfoinweio newionfiownf',
+          size: 34,
+          rooms: 2,
+          imageUrl:
+              'https://media.istockphoto.com/photos/low-angle-of-tall-building-in-manhattan-picture-id1291177121',
+          latitude: 21,
+          longitude: 37,
+          features: [
+            LocationFeature(
+              value: 1,
+              name: 'Number of gay people',
+            ),
+            LocationFeature(
+              value: 0.8,
+              name: 'Percent of barber users',
+            ),
+            LocationFeature(
+              value: 0.1,
+              name: 'JS developer happines',
+            )
+          ],
+        ),
+        Location(
+          price: 1,
+          description:
+              'wejfnwjencseojnfsoenfoisenfoiwenfoiwneio oifwenfoinewoinf wioenfoi wneiofn ewoinfoi nweiofnoiwenoifniowenfoinweio newionfiownf',
+          size: 34,
+          rooms: 2,
+          imageUrl:
+              'https://media.istockphoto.com/photos/low-angle-of-tall-building-in-manhattan-picture-id1291177121',
+          latitude: 21,
+          longitude: 37,
+          features: [
+            LocationFeature(
+              value: 0.99,
+              name: 'Autism',
+            ),
+            LocationFeature(
+              value: 0.3,
+              name: 'Cookies',
+            ),
+            LocationFeature(
+              value: 0.10,
+              name: 'Cheap weed',
+            )
+          ],
+        ),
+        Location(
+          price: 1,
+          description:
+              'wejfnwjencseojnfsoenfoisenfoiwenfoiwneio oifwenfoinewoinf wioenfoi wneiofn ewoinfoi nweiofnoiwenoifniowenfoinweio newionfiownf',
+          size: 34,
+          rooms: 2,
+          imageUrl:
+              'https://media.istockphoto.com/photos/low-angle-of-tall-building-in-manhattan-picture-id1291177121',
+          latitude: 21,
+          longitude: 37,
+          features: [
+            LocationFeature(
+              value: 0.99,
+              name: 'Autism',
+            ),
+            LocationFeature(
+              value: 0.3,
+              name: 'Cookies',
+            ),
+            LocationFeature(
+              value: 0.10,
+              name: 'Cheap weed',
+            )
+          ],
+        ),
+        Location(
+          price: 1,
+          description:
+              'wejfnwjencseojnfsoenfoisenfoiwenfoiwneio oifwenfoinewoinf wioenfoi wneiofn ewoinfoi nweiofnoiwenoifniowenfoinweio newionfiownf',
+          size: 34,
+          rooms: 2,
+          imageUrl:
+              'https://media.istockphoto.com/photos/low-angle-of-tall-building-in-manhattan-picture-id1291177121',
+          latitude: 21,
+          longitude: 37,
+          features: [
+            LocationFeature(
+              value: 0.99,
+              name: 'Autism',
+            ),
+            LocationFeature(
+              value: 0.3,
+              name: 'Cookies',
+            ),
+            LocationFeature(
+              value: 0.10,
+              name: 'Cheap weed',
+            )
+          ],
+        ),
+        Location(
+          price: 1,
+          description:
+              'wejfnwjencseojnfsoenfoisenfoiwenfoiwneio oifwenfoinewoinf wioenfoi wneiofn ewoinfoi nweiofnoiwenoifniowenfoinweio newionfiownf',
+          size: 34,
+          rooms: 2,
+          imageUrl:
+              'https://media.istockphoto.com/photos/low-angle-of-tall-building-in-manhattan-picture-id1291177121',
+          latitude: 21,
+          longitude: 37,
+          features: [
+            LocationFeature(
+              value: 0.99,
+              name: 'Autism',
+            ),
+            LocationFeature(
+              value: 0.3,
+              name: 'Cookies',
+            ),
+            LocationFeature(
+              value: 0.10,
+              name: 'Cheap weed',
+            )
+          ],
+        ),
+      ],
+    );
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key, required this.title}) : super(key: key);
@@ -109,35 +241,35 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _autocomplete() {
     return Container(
         child: TypeAheadField<PKDData?>(
-          textFieldConfiguration: TextFieldConfiguration(
-              controller: this._typeAheadController,
-              style: GoogleFonts.montserrat(color: Colors.black),
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.only(top:0, bottom: 0, left: 15),
-                focusedBorder: OutlineInputBorder(
-                  gapPadding: 0.0,
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                  borderSide: BorderSide(color: Color(0xff406D86), width: 2.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  gapPadding: 0.0,
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                  borderSide: BorderSide(color: Color(0xff406D86), width: 2.0),
-                ),
-                hintText: 'Mobile Number',
-              )),
-          suggestionsCallback: (pattern) async {
-            return BusinessCategoriesService.getSuggestions(pattern);
-          },
-          itemBuilder: (context, suggestion) {
-            return ListTile(
-                leading: Image.asset(suggestion!.iconPath),
-                title: Text(suggestion.name));
-          },
-          onSuggestionSelected: (suggestion) {
-            this._typeAheadController.text = suggestion!.name;
-          },
-        ));
+      textFieldConfiguration: TextFieldConfiguration(
+          controller: this._typeAheadController,
+          style: GoogleFonts.montserrat(color: Colors.black),
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.only(top: 0, bottom: 0, left: 15),
+            focusedBorder: OutlineInputBorder(
+              gapPadding: 0.0,
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+              borderSide: BorderSide(color: Color(0xff406D86), width: 2.0),
+            ),
+            enabledBorder: OutlineInputBorder(
+              gapPadding: 0.0,
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+              borderSide: BorderSide(color: Color(0xff406D86), width: 2.0),
+            ),
+            hintText: 'Mobile Number',
+          )),
+      suggestionsCallback: (pattern) async {
+        return BusinessCategoriesService.getSuggestions(pattern);
+      },
+      itemBuilder: (context, suggestion) {
+        return ListTile(
+            leading: Image.asset(suggestion!.iconPath),
+            title: Text(suggestion.name));
+      },
+      onSuggestionSelected: (suggestion) {
+        this._typeAheadController.text = suggestion!.name;
+      },
+    ));
   }
 
   Widget _detailsColumn(BuildContext context) {
