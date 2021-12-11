@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:harbour/BusinessCategoriesService.dart';
+import 'package:harbour/res/Assets.dart';
 
 import 'models/PKDData.dart';
 
@@ -51,56 +53,93 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  final TextEditingController _typeAheadController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
-        body: Row(children: [_localizationColumn(context),
-        _detailsColumn(context)],
-    )
-    );
+        body: Container(
+            padding: const EdgeInsets.only(top: 25),
+            color: Color(0xffE5E5E5),
+            child: Row(
+              children: [_leftColumn(), _detailsColumn(context)],
+            )));
   }
 
-  Widget _localizationColumn(BuildContext context) {
-    return Container(width: 300, child:
-    Column(children: [
-      Padding(padding: const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8), child:   _autocomplete())
-    ,
-      Expanded(child: Container(color: Color(0xFF0d3225)))
-    ]));
+  Widget _leftColumn() {
+    return Container(
+        decoration: BoxDecoration(
+            color: Color(0xffF2F8FA),
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(0),
+                bottomRight: Radius.circular(50.0)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.6),
+                spreadRadius: 13,
+                blurRadius: 7,
+                offset: Offset(0, 3), // changes position of shadow
+              ),
+            ]),
+        width: 400,
+        child: Column(children: [
+          _appInfo(),
+          Padding(
+              padding: const EdgeInsets.only(
+                  left: 30, right: 30, bottom: 8, top: 30),
+              child: Column(children: [
+                _appInfoText(),
+                Container(height: 40),
+                _autocomplete()
+              ]))
+        ]));
+  }
+
+  Widget _appInfo() {
+    return Image.asset(Assets.banner);
+  }
+
+  Widget _appInfoText() {
+    return Text(
+        "Tekst z wyjaśnieniem co w ogóle możemy w tej app zrobić i jak nam może zajebiście pomóc płacić podatek dochodowy, ale we własnym lokalu.",
+        style: GoogleFonts.lora(
+            fontWeight: FontWeight.w600, fontSize: 18, color: Colors.black));
+  }
+
+  Widget _autocomplete() {
+    return Container(
+        child: TypeAheadField<PKDData?>(
+          textFieldConfiguration: TextFieldConfiguration(
+              controller: this._typeAheadController,
+              style: GoogleFonts.montserrat(color: Colors.black),
+              decoration: InputDecoration(
+                focusedBorder: OutlineInputBorder(
+                  gapPadding: 0.0,
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  borderSide: BorderSide(color: Color(0xff406D86), width: 2.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 0.0,
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  borderSide: BorderSide(color: Color(0xff406D86), width: 2.0),
+                ),
+                hintText: 'Mobile Number',
+              )),
+          suggestionsCallback: (pattern) async {
+            return BusinessCategoriesService.getSuggestions(pattern);
+          },
+          itemBuilder: (context, suggestion) {
+            return ListTile(
+                leading: Image.asset(suggestion!.iconPath),
+                title: Text(suggestion.name));
+          },
+          onSuggestionSelected: (suggestion) {
+            this._typeAheadController.text = suggestion!.name;
+          },
+        ));
   }
 
   Widget _detailsColumn(BuildContext context) {
-    return Expanded(child: Container(color: Color(0xFFaf0a0a)));
+    return Container();
   }
-
-  Widget _autocomplete(){
-   return TypeAheadField<PKDData?>(
-      textFieldConfiguration: TextFieldConfiguration(
-          autofocus: true,
-          style: DefaultTextStyle.of(context).style.copyWith(
-              fontStyle: FontStyle.italic
-          ),
-          decoration: InputDecoration(
-              border: OutlineInputBorder()
-          )
-      ),
-      suggestionsCallback: (pattern) async {
-        return BusinessCategoriesService.getSuggestions(pattern);
-      },
-      itemBuilder: (context, suggestion) {
-        return ListTile(
-          leading: suggestion!.icon,
-          title: Text(suggestion.name)
-        );
-      },
-      onSuggestionSelected: (suggestion) {
-
-      },
-    );
-  }
-
 }

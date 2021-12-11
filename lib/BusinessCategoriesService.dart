@@ -5,7 +5,7 @@ import 'package:harbour/res/Assets.dart';
 class BusinessCategoriesService {
   static final List<PKDData> users = [PKDData(
   name: "Fryzjer",
-  icon: Image.asset(Assets.hair),
+  iconPath: Assets.hair,
   description: "Fryzjer lubi obcinać ludzi")];
 
   static List<PKDData> getSuggestions(String query) =>

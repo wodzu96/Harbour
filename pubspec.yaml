@@ -25,6 +25,7 @@ dependencies:
     sdk: flutter
 
   flutter_typeahead: ^3.2.4
+  google_fonts: ^2.1.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -79,3 +80,5 @@ flutter:
 
   assets:
     - assets/images/hair.png
+    - assets/images/logo.png
+    - assets/images/banner.png
