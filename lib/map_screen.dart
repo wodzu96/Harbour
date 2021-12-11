@@ -34,7 +34,7 @@ class _MapScreenState extends State<MapScreen> {
             child: _entriesColumn(context),
           ),
           Expanded(
-            flex: 1,
+            flex: 2,
             child: _mapColumn(context),
           ),
         ],
@@ -61,7 +61,7 @@ class _MapScreenState extends State<MapScreen> {
   Widget _mapColumn(BuildContext context) => Column(
         children: [
           Expanded(
-            flex: 1,
+            flex: 2,
             child: _map(context),
           ),
           Expanded(
