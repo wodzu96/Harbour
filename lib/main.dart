@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: _mapScreen(),
+      home: MyHomePage(title: ''),
     );
   }
 }
@@ -61,19 +61,19 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
   final TextEditingController _minPriceInputController =
-  TextEditingController(text: "20");
+      TextEditingController(text: "20");
   final TextEditingController _maxPriceInputController =
-  TextEditingController(text: "100000");
+      TextEditingController(text: "100000");
   final TextEditingController _minEstateAreaInputController =
-  TextEditingController(text: "20");
+      TextEditingController(text: "20");
   final TextEditingController _maxEstateAreaInputController =
-  TextEditingController(text: "100000");
+      TextEditingController(text: "100000");
   final TextEditingController _minRoomsNumberAreaInputController =
-  TextEditingController(text: "1");
+      TextEditingController(text: "1");
   final TextEditingController _maxRoomsNumberInputController =
-  TextEditingController(text: "8");
+      TextEditingController(text: "8");
   final TextEditingController _autocompleteInputController =
-  TextEditingController();
+      TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
   @override
@@ -81,18 +81,14 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
         body: ProgressHUD(
             child: Builder(
-                builder: (context) =>
-                    SingleChildScrollView(
-                        padding: const EdgeInsets.only(top: 24),
-                        child: Container(
-                            height: MediaQuery
-                                .of(context)
-                                .size
-                                .height - 24,
-                            color: Color(0xffB5DBED),
-                            child: Row(
-                              children: [_leftColumn(), _rightColumn(context)],
-                            ))))));
+                builder: (context) => SingleChildScrollView(
+                    padding: const EdgeInsets.only(top: 24),
+                    child: Container(
+                        height: MediaQuery.of(context).size.height - 24,
+                        color: Color(0xffB5DBED),
+                        child: Row(
+                          children: [_leftColumn(), _rightColumn(context)],
+                        ))))));
   }
 
   Widget _leftColumn() {
@@ -120,10 +116,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 _appInfoText(),
                 Container(height: 40),
                 _autocomplete(),
-                _getInputDescription("Please find the most related category to your business."),
+                _getInputDescription(
+                    "Please find the most related category to your business."),
                 Container(height: 20),
                 _businessDescription(),
-                _getInputDescription("The description helps to find most related estate’s characteristic. Feel free to modify text in this box.")
+                _getInputDescription(
+                    "The description helps to find most related estate’s characteristic. Feel free to modify text in this box.")
               ]))
         ]));
   }
@@ -134,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _appInfoText() {
     return Text(
-        "This app is helping real estate brokers find the most suitable locations for their clients’ businesses.  By choosing category and adjusting few filters you’ll find the one and only place for them.",
+        "This app is helping real estate brokers find the most suitable locations for their clients’ businesses. By choosing category and adjusting few filters you’ll find the one and only place for them.",
         style: GoogleFonts.lora(
             fontWeight: FontWeight.w600, fontSize: 18, color: Colors.black));
   }
@@ -142,25 +140,25 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _autocomplete() {
     return Container(
         child: TypeAheadField<PKDData?>(
-          suggestionsBoxDecoration: SuggestionsBoxDecoration(elevation: 1.0),
-          textFieldConfiguration: TextFieldConfiguration(
-              controller: this._autocompleteInputController,
-              style: GoogleFonts.montserrat(color: Colors.black),
-              scrollPadding: EdgeInsets.only(bottom: 190),
-              decoration: _autocompleteInputDecoration()),
-          suggestionsCallback: (pattern) async {
-            return BusinessCategoriesService.getSuggestions(pattern);
-          },
-          itemBuilder: (context, suggestion) {
-            return ListTile(
-                leading: Image.asset(suggestion!.iconPath, width: 20, height: 20),
-                title: Text(suggestion.name));
-          },
-          onSuggestionSelected: (suggestion) {
-            this._autocompleteInputController.text = suggestion!.name;
-            this._descriptionController.text = suggestion.description;
-          },
-        ));
+      suggestionsBoxDecoration: SuggestionsBoxDecoration(elevation: 1.0),
+      textFieldConfiguration: TextFieldConfiguration(
+          controller: this._autocompleteInputController,
+          style: GoogleFonts.montserrat(color: Colors.black),
+          scrollPadding: EdgeInsets.only(bottom: 190),
+          decoration: _autocompleteInputDecoration()),
+      suggestionsCallback: (pattern) async {
+        return BusinessCategoriesService.getSuggestions(pattern);
+      },
+      itemBuilder: (context, suggestion) {
+        return ListTile(
+            leading: Image.asset(suggestion!.iconPath, width: 20, height: 20),
+            title: Text(suggestion.name));
+      },
+      onSuggestionSelected: (suggestion) {
+        this._autocompleteInputController.text = suggestion!.name;
+        this._descriptionController.text = suggestion.description;
+      },
+    ));
   }
 
   Widget _businessDescription() {
@@ -169,7 +167,7 @@ class _MyHomePageState extends State<MyHomePage> {
         controller: this._descriptionController,
         scrollPadding: EdgeInsets.only(bottom: 128),
         decoration:
-        _standardInputDecoration().copyWith(hintText: "Opis działalności"),
+            _standardInputDecoration().copyWith(hintText: "Opis działalności"),
         minLines: 3,
         style: GoogleFonts.montserrat(color: Colors.black),
         maxLines: 30);
@@ -178,60 +176,59 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _rightColumn(BuildContext context) {
     return Expanded(
         child: Column(children: [
-          Container(height: 100),
-          Text("Please use filtration to improve searching.",
-              style: GoogleFonts.lora(
-                  fontSize: 30, fontWeight: FontWeight.w600)),
-          Container(
-              width: 400,
-              padding: EdgeInsets.only(top: 50),
-              child: Column(children: [
-                _filterCell("Estate’s price", _minPriceInputController,
-                    _maxPriceInputController),
-                Container(height: 50),
-                _filterCell("Estate’s area", _minEstateAreaInputController,
-                    _maxEstateAreaInputController),
-                Container(height: 50),
-                _filterCell(
-                    "Number of rooms", _minRoomsNumberAreaInputController,
-                    _maxRoomsNumberInputController),
-                Container(height: 50),
-                SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                          shape: MaterialStateProperty.all<
-                              RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                              )
-                          ),
-                          backgroundColor:
+      Container(height: 100),
+      Text("Please use filtration to improve searching.",
+          style: GoogleFonts.lora(fontSize: 30, fontWeight: FontWeight.w600)),
+      Container(
+          width: 400,
+          padding: EdgeInsets.only(top: 50),
+          child: Column(children: [
+            _filterCell("Estate’s price", _minPriceInputController,
+                _maxPriceInputController),
+            Container(height: 50),
+            _filterCell("Estate’s area", _minEstateAreaInputController,
+                _maxEstateAreaInputController),
+            Container(height: 50),
+            _filterCell("Number of rooms", _minRoomsNumberAreaInputController,
+                _maxRoomsNumberInputController),
+            Container(height: 50),
+            SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      )),
+                      backgroundColor:
                           MaterialStateProperty.all(Color(0xff1D3851))),
-                      onPressed: () async {
-                        final progress = ProgressHUD.of(context);
-                        progress?.showWithText('Loading...');
-                        final locations = getLocationRequest();
-                        final response = await Api().getLocations(getLocationRequest());
-                        if(response != null) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) =>
+                  onPressed: () async {
+                    final progress = ProgressHUD.of(context);
+                    progress?.showWithText('Loading...');
+                    final locations = getLocationRequest();
+                    final response =
+                        await Api().getLocations(getLocationRequest());
+                    if (response != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
                                 MapScreen(locations: response.realEstates)),
-                          );
-                        }
-                        progress?.dismiss();
-                      },
-                      child: Text('SEARCH', style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.w700)),
-                    ))
-              ])),
-        ]));
+                      );
+                    }
+                    progress?.dismiss();
+                  },
+                  child: Text('SEARCH',
+                      style:
+                          GoogleFonts.montserrat(fontWeight: FontWeight.w700)),
+                ))
+          ])),
+    ]));
   }
 
-
-  Widget _filterCell(String name,
+  Widget _filterCell(
+      String name,
       TextEditingController minValueEditingController,
       TextEditingController maxValueEditingController) {
     return Column(children: [
@@ -253,7 +250,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _fromToLabel(String data) {
     return Text(data,
         style:
-        GoogleFonts.montserrat(fontWeight: FontWeight.w400, fontSize: 15));
+            GoogleFonts.montserrat(fontWeight: FontWeight.w400, fontSize: 15));
   }
 
   Widget _rangeInput(TextEditingController textEditingController) {
@@ -346,8 +343,7 @@ class _MyHomePageState extends State<MyHomePage> {
         roomsMin: int.parse(_minRoomsNumberAreaInputController.text),
         sizeMin: int.parse(_minEstateAreaInputController.text),
         sizeMax: int.parse(_maxEstateAreaInputController.text),
-        text: _descriptionController.text
-    );
+        text: _descriptionController.text);
   }
 }
 
