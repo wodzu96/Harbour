@@ -4,4 +4,5 @@ class Assets {
   static const String restaurants = "assets/images/restaurants.png";
   static const String logo = "assets/images/logo.png";
   static const String banner = "assets/images/banner.png";
+  static const String sort = "assets/images/sort.png";
 }

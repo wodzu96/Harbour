@@ -35,6 +35,8 @@ dependencies:
   flutter_progress_hud: ^2.0.0
   http: 0.13.4
   percent_indicator: 3.4.0
+  syncfusion_flutter_core: 19.3.57
+  syncfusion_flutter_sliders: 19.3.57
 
 dev_dependencies:
   flutter_test:
@@ -85,6 +87,7 @@ flutter:
     - assets/images/hair.png
     - assets/images/logo.png
     - assets/images/banner.png
+    - assets/images/sort.png
     - assets/images/hairdressing.png
     - assets/images/restaurants.png
     - assets/images/clothes.png

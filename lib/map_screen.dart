@@ -1,9 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:harbour/filter_popup.dart';
 import 'package:harbour/location_cell.dart';
 import 'package:harbour/models/Location.dart';
 import 'package:harbour/norm_value_cell.dart';
+import 'package:harbour/res/Assets.dart';
 import 'package:harbour/value_cell.dart';
 
 class MapScreen extends StatefulWidget {
@@ -18,11 +22,17 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   late GoogleMapController _mapController;
   late Location _selectedLocation;
+  late Map<String, double> _featureToRate;
 
   @override
   void initState() {
     super.initState();
     _selectedLocation = widget.locations.first;
+    _featureToRate = Map.fromIterable(
+      _selectedLocation.features,
+      key: (feature) => feature.name,
+      value: (value) => 0,
+    );
   }
 
   @override
@@ -55,18 +65,48 @@ class _MapScreenState extends State<MapScreen> {
         ],
       );
 
-  Widget _entriesColumn(BuildContext context) => Column(
-        mainAxisSize: MainAxisSize.max,
+  Widget _entriesColumn(BuildContext context) => Stack(
         children: [
-          _estatesHeader(context),
-          Divider(
-            height: 2,
-            color: Color(0xFF1D3851),
-            thickness: 2,
+          Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              _estatesHeader(context),
+              Divider(
+                height: 2,
+                color: Color(0xFF1D3851),
+                thickness: 2,
+              ),
+              Expanded(child: _estatesList(context))
+            ],
           ),
-          Expanded(child: _estatesList(context))
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: FloatingActionButton(
+                child: Padding(
+                  padding: EdgeInsets.all(12),
+                  child: Image.asset(Assets.sort),
+                ),
+                backgroundColor: Color(0xFF1D3851),
+                onPressed: _onFilterButtonPressed,
+              ),
+            ),
+          )
         ],
       );
+
+  void _onFilterButtonPressed() async {
+    Map<String, double>? result = await showDialog(
+      context: context,
+      builder: (context) => FilterPopup(
+        featureToRate: _featureToRate,
+      ),
+    );
+
+    log(result.toString());
+    print(result.toString());
+  }
 
   Widget _estatesHeader(BuildContext context) => Align(
         alignment: Alignment.centerLeft,
@@ -87,7 +127,7 @@ class _MapScreenState extends State<MapScreen> {
       );
 
   Widget _estatesList(BuildContext context) => ListView.separated(
-        padding: EdgeInsets.zero,
+        padding: EdgeInsets.only(bottom: 88),
         itemBuilder: (context, positon) => LocationCell(
           location: widget.locations[positon],
           isSelected: widget.locations[positon] == _selectedLocation,
