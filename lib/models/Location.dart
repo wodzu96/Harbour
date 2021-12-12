@@ -23,7 +23,7 @@ class Location {
 
   factory Location.fromJson(Map<String, dynamic> json) => Location(
         price: json["price"],
-        description: json["description"],
+        description: json["desc"],
         size: json["size"],
         rooms: json["rooms_n"],
         imageUrl: json["foto_url"],

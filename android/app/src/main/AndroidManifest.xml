@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="pl.hackyeah.harbour">
 
-  <application android:label="harbour" android:icon="@mipmap/ic_launcher">
+  <application android:label="harbour" android:icon="@mipmap/ic_launcher" android:networkSecurityConfig="@xml/network_security_config">
 
     <!-- TODO: Add your Google Maps API key here -->
     <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyADZz1_PzIrPeRNhl782AvR2IxMMiE65D0" />

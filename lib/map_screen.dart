@@ -122,7 +122,7 @@ class _MapScreenState extends State<MapScreen> {
             location.latitude,
             location.longitude,
           ),
-          12));
+          17));
     });
   }
 
@@ -150,6 +150,7 @@ class _MapScreenState extends State<MapScreen> {
           ),
           zoom: 12.0,
         ),
+    mapType: MapType.hybrid,
         myLocationButtonEnabled: false,
         markers: widget.locations.map((e) => e.toMarker()).toSet(),
       );

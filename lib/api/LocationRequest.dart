@@ -18,12 +18,12 @@ class LocationRequest {
   });
 
   Map<String, dynamic> toJson() => {
-        "price_max": priceMax,
-        "price_min": priceMin,
-        "size_max": sizeMax,
-        "size_min": sizeMin,
-        "rooms_n_max": roomsMax,
-        "rooms_n_min": roomsMin,
-        "text": text,
+        'price_max': priceMax,
+        'price_min': priceMin,
+        'size_max': sizeMax,
+        'size_min': sizeMin,
+        'rooms_n_max': roomsMax,
+        'rooms_n_min': roomsMin,
+        'text': text,
       };
 }
