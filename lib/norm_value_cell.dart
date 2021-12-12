@@ -31,6 +31,7 @@ class NormValueCell extends StatelessWidget {
         alignment: Alignment.centerLeft,
         child: Text(
           _title ?? '',
+          maxLines: 2,
           textAlign: TextAlign.start,
           style: TextStyle(
             fontFamily: GoogleFonts.lora(
@@ -42,7 +43,7 @@ class NormValueCell extends StatelessWidget {
       );
 
   Widget _valueText(BuildContext context) => Text(
-        _value != null ? '${_value! * 100}%' : '',
+        _value != null ? '${(_value! * 100).toStringAsPrecision(3)}%' : '',
         textAlign: TextAlign.center,
         style: TextStyle(
           fontFamily: GoogleFonts.lora(

@@ -23,16 +23,22 @@ class _MapScreenState extends State<MapScreen> {
   late GoogleMapController _mapController;
   late Location _selectedLocation;
   late Map<String, double> _featureToRate;
+  late List<Location> _locations;
 
   @override
   void initState() {
     super.initState();
     _selectedLocation = widget.locations.first;
+    _locations = widget.locations;
     _featureToRate = Map.fromIterable(
       _selectedLocation.features,
       key: (feature) => feature.name,
       value: (value) => 0,
     );
+    Future.delayed(Duration(milliseconds: 100), () {
+      _onFilterButtonPressed();
+    });
+
   }
 
   @override
@@ -103,9 +109,22 @@ class _MapScreenState extends State<MapScreen> {
         featureToRate: _featureToRate,
       ),
     );
-
+    setState(() {
+      if(result != null) {
+        _featureToRate = result;
+        log(_locations.toString());
+        _locations.sort((a, b) => _getLocationScore(b).compareTo(_getLocationScore(a)));
+        log(_locations.toString());
+      }
+    });
     log(result.toString());
     print(result.toString());
+  }
+
+  double _getLocationScore(Location location){
+    final score = location.features.map((e) => (_featureToRate[e.name] ?? 0.0) * e.value).reduce((value, element) => value + element);
+    log(score.toString());
+    return score;
   }
 
   Widget _estatesHeader(BuildContext context) => Align(
@@ -129,16 +148,16 @@ class _MapScreenState extends State<MapScreen> {
   Widget _estatesList(BuildContext context) => ListView.separated(
         padding: EdgeInsets.only(bottom: 88),
         itemBuilder: (context, positon) => LocationCell(
-          location: widget.locations[positon],
-          isSelected: widget.locations[positon] == _selectedLocation,
+          location: _locations[positon],
+          isSelected: _locations[positon] == _selectedLocation,
           onTap: (location) => _onLocationTap(context, location),
         ),
         separatorBuilder: _estatesSeparator,
-        itemCount: widget.locations.length,
+        itemCount: _locations.length,
       );
 
   Widget _estatesSeparator(BuildContext context, int position) {
-    int indexOfSelected = widget.locations.indexOf(_selectedLocation);
+    int indexOfSelected = _locations.indexOf(_selectedLocation);
 
     if (position == indexOfSelected || position + 1 == indexOfSelected) {
       return SizedBox(height: 2);
@@ -192,7 +211,7 @@ class _MapScreenState extends State<MapScreen> {
         ),
     mapType: MapType.hybrid,
         myLocationButtonEnabled: false,
-        markers: widget.locations.map((e) => e.toMarker()).toSet(),
+        markers: _locations.map((e) => e.toMarker()).toSet(),
       );
 
   Widget _indicatorsTable(BuildContext context) => Column(
